@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace TiiK___project
 {
@@ -10,7 +12,11 @@ namespace TiiK___project
     {
         public static List<AnalyzedData> CountQuantities(string filepath) {
             List<AnalyzedData> ListOfAll = new List<AnalyzedData>();
-            string text = System.IO.File.ReadAllText(filepath);
+            string text;
+            try
+            {
+            text = System.IO.File.ReadAllText(filepath);
+           
             var map = new Dictionary<char, double>();
             for (int i = 0; i < text.Length; i++) {
                 char c = text[i];
@@ -37,6 +43,13 @@ namespace TiiK___project
                 }
                 AnalyzedData pom = new AnalyzedData { Character = letter.Key, Count = letter.Value, Probability = probability, Quantity = quantity };
                 ListOfAll.Add(pom);
+            }
+            
+            }
+            catch (FileNotFoundException er)
+            {
+                MessageBox.Show("File with specifed path not exists.");
+
             }
             return ListOfAll;
         }
