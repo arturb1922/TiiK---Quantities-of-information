@@ -40,26 +40,19 @@ namespace TiiK___project
             Console.WriteLine();
             var data = new List<AnalyzedData>();
 
-            //
-            var sample = new AnalyzedData { Character = 'a', Count = 13, Probability = 0.13, Quantity = 3.14 };
-            data.Add(sample);
-            sample = new AnalyzedData { Character = 'b', Count = 55, Probability = 0.63, Quantity = 8.14 };
-            data.Add(sample);
-            sample = new AnalyzedData { Character = 'c', Count = 73, Probability = 0.23, Quantity = 1.11 };
-            data.Add(sample);
-            //
-
-            //var data = countQuantities(textBox_FileLocation.Text);
-
+            data = QuantityCounter.CountQuantities(textBox_FileLocation.Text);
+            data.Sort((x, y) => y.Quantity.CompareTo(x.Quantity));
             dataGrid_AnalyzeResults.ItemsSource = data;
         }
 
-        private struct AnalyzedData
-        {
-            public char Character { set; get; }
-            public double Count { set; get; }
-            public double Probability { set; get; }
-            public double Quantity { set; get; }
-        }
+
+    }
+
+    public struct AnalyzedData
+    {
+        public char Character { set; get; }
+        public double Count { set; get; }
+        public double Probability { set; get; }
+        public double Quantity { set; get; }
     }
 }
