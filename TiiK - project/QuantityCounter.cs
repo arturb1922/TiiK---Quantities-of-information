@@ -26,7 +26,15 @@ namespace TiiK___project
 
             foreach (KeyValuePair<char, double> letter in map) {
                 double probability = CountProbability(letter.Value, text.Length);
-                double quantity = GetQuantity(probability);
+                double quantity;
+                if (probability == 0)
+                {
+                    quantity = 0;
+                }
+                else
+                {
+                    quantity = GetQuantity(probability);
+                }
                 AnalyzedData pom = new AnalyzedData { Character = letter.Key, Count = letter.Value, Probability = probability, Quantity = quantity };
                 ListOfAll.Add(pom);
             }
@@ -34,11 +42,11 @@ namespace TiiK___project
         }
 
         static double CountProbability(double letterCount, double textLength) {
-            return Math.Round(letterCount / textLength, 3);
+            return Math.Round(letterCount / textLength, 4);
         }
 
         static double GetQuantity(double probability) {
-            return Math.Round(Math.Log(2, 1 / probability), 3);
+            return Math.Round(Math.Log(2, 1 / probability), 4);
         }
     }
 }
