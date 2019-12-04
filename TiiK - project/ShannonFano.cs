@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -83,7 +84,7 @@ namespace TiiK___project
                 }
             }
 
-            byte[] bytes = new byte[bits.Length];
+            byte[] bytes = new byte[bits.Length/8+1];
             bits.CopyTo(bytes, 0);
 
             using (FileStream stream = new FileStream("C:\\Users\\fpietraszak\\Documents\\output.txt", FileMode.Create)) {
@@ -92,6 +93,16 @@ namespace TiiK___project
                     writer.Close();
                 }
             }
+
+            BinaryFormatter formatter = new BinaryFormatter();
+            System.IO.Stream ms = File.OpenWrite("C:\\Users\\fpietraszak\\Documents\\output_stats.txt");
+            formatter.Serialize(ms, dictionary);
+
+            long f0 = new System.IO.FileInfo(filepath).Length;
+            long f1 = new System.IO.FileInfo("C:\\Users\\fpietraszak\\Documents\\output.txt").Length;
+            long f2 = new System.IO.FileInfo("C:\\Users\\fpietraszak\\Documents\\output_stats.txt").Length;
+
+            MessageBox.Show("Compression ratio: " + f0*1.0/(f1+f2)*1.0);
 
         }
 
