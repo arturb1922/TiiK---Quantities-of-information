@@ -20,8 +20,25 @@ namespace TiiK___project
     /// </summary>
     public partial class MainWindow : Window
     {
+        private List<AnalyzedData> currentQuantities;
         public MainWindow() {
             InitializeComponent();
+        }
+
+        private void Analyze() {
+            var data = new List<AnalyzedData>();
+            data = QuantityCounter.CountQuantities(textBox_FileLocation.Text);
+            currentQuantities = data;
+
+            data.Sort((x, y) => y.Quantity.CompareTo(x.Quantity));
+            dataGrid_AnalyzeResults.ItemsSource = data;
+
+            double Entropy = new double();
+            foreach (AnalyzedData d in data) {
+                Entropy += d.Probability * Math.Log((1 / d.Probability), 2);
+            }
+            Entropy = Math.Round(Entropy, 5);
+            textBox_Entropy.Text = Entropy.ToString();
         }
 
         private void button_OpenFileDialog_Click(object sender, RoutedEventArgs e) {
@@ -37,21 +54,13 @@ namespace TiiK___project
         }
 
         private void button_Analyze_Click(object sender, RoutedEventArgs e) {
-            Console.WriteLine();
-            var data = new List<AnalyzedData>();
-            data = QuantityCounter.CountQuantities(textBox_FileLocation.Text);
-            data.Sort((x, y) => y.Quantity.CompareTo(x.Quantity));
-            dataGrid_AnalyzeResults.ItemsSource = data;
-
-            double Entropy = new double();
-            foreach (AnalyzedData d in data) {
-                Entropy += d.Probability * Math.Log((1 / d.Probability), 2);
-            }
-            Entropy = Math.Round(Entropy, 5);
-            textBox_Entropy.Text = Entropy.ToString();
+            Analyze();
         }
 
-
+        private void button_Encode_Click(object sender, RoutedEventArgs e) {
+            Analyze();
+            ShannonFano.Encode(textBox_FileLocation.Text, currentQuantities);
+        }
     }
 
     public struct AnalyzedData

@@ -14,5 +14,6 @@
         <DataGrid x:Name="dataGrid_AnalyzeResults" HorizontalAlignment="Left" Height="324" Margin="452,46,0,0" VerticalAlignment="Top" Width="283" IsReadOnly="True" />
         <TextBox x:Name="textBox_Entropy" HorizontalAlignment="Left" Height="25" Margin="665,375,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" IsReadOnly="True"/>
         <Label x:Name="label_Entropy" Content="Entropy" HorizontalAlignment="Left" Margin="617,375,0,0" VerticalAlignment="Top" Height="25" FontSize="11"/>
+        <Button x:Name="button_Encode" Content="Encode" HorizontalAlignment="Left" Margin="292,77,0,0" VerticalAlignment="Top" Width="74" Click="button_Encode_Click"/>
     </Grid>
 </Window>
