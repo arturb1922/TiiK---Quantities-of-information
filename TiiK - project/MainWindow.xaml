@@ -11,6 +11,8 @@
         <Label x:Name="label_AnalyzeFile" Content="Select file to analyze" HorizontalAlignment="Left" Margin="23,20,0,0" VerticalAlignment="Top"/>
         <Button x:Name="button_Analyze" Content="Analyze" HorizontalAlignment="Left" Margin="292,46,0,0" VerticalAlignment="Top" Width="74" RenderTransformOrigin="2.001,2.773" Height="20" Click="button_Analyze_Click"/>
         <Button x:Name="button_OpenFileDialog" Content="..." HorizontalAlignment="Left" Margin="269,48,0,0" VerticalAlignment="Top" Width="16" Height="16" FontSize="10" Click="button_OpenFileDialog_Click"/>
-        <DataGrid x:Name="dataGrid_AnalyzeResults" HorizontalAlignment="Left" Height="324" Margin="471,46,0,0" VerticalAlignment="Top" Width="264" IsReadOnly="True" />
+        <DataGrid x:Name="dataGrid_AnalyzeResults" HorizontalAlignment="Left" Height="324" Margin="452,46,0,0" VerticalAlignment="Top" Width="283" IsReadOnly="True" />
+        <TextBox x:Name="textBox_Entropy" HorizontalAlignment="Left" Height="25" Margin="665,375,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" IsReadOnly="True"/>
+        <Label x:Name="label_Entropy" Content="Entropy" HorizontalAlignment="Left" Margin="617,375,0,0" VerticalAlignment="Top" Height="25" FontSize="11"/>
     </Grid>
 </Window>

@@ -39,10 +39,16 @@ namespace TiiK___project
         private void button_Analyze_Click(object sender, RoutedEventArgs e) {
             Console.WriteLine();
             var data = new List<AnalyzedData>();
-
             data = QuantityCounter.CountQuantities(textBox_FileLocation.Text);
             data.Sort((x, y) => y.Quantity.CompareTo(x.Quantity));
             dataGrid_AnalyzeResults.ItemsSource = data;
+
+            double Entropy = new double();
+            foreach (AnalyzedData d in data) {
+                Entropy += d.Probability * Math.Log((1 / d.Probability), 2);
+            }
+            Entropy = Math.Round(Entropy, 5);
+            textBox_Entropy.Text = Entropy.ToString();
         }
 
 
@@ -50,6 +56,7 @@ namespace TiiK___project
 
     public struct AnalyzedData
     {
+        public String Hex { set; get; }
         public char Character { set; get; }
         public double Count { set; get; }
         public double Probability { set; get; }

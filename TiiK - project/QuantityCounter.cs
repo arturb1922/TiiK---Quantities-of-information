@@ -13,41 +13,34 @@ namespace TiiK___project
         public static List<AnalyzedData> CountQuantities(string filepath) {
             List<AnalyzedData> ListOfAll = new List<AnalyzedData>();
             string text;
-            try
-            {
-            text = System.IO.File.ReadAllText(filepath);
-           
-            var map = new Dictionary<char, double>();
-            for (int i = 0; i < text.Length; i++) {
-                char c = text[i];
-                if (map.ContainsKey(text[i])) {
-                    map[c]++;
-                } else {
-                    int ascii = (int)c;
-                    if ((ascii >= 65 && ascii <= 90) || (ascii >= 97 && ascii <= 122) || (ascii >= 200 && ascii <= 400)) {
+            try {
+                text = System.IO.File.ReadAllText(filepath);
+
+                var map = new Dictionary<char, double>();
+                for (int i = 0; i < text.Length; i++) {
+                    char c = text[i];
+                    if (map.ContainsKey(text[i])) {
+                        map[c]++;
+                    } else {
+                        int ascii = (int)c;
                         map.Add(c, 1);
                     }
                 }
-            }
 
-            foreach (KeyValuePair<char, double> letter in map) {
-                double probability = CountProbability(letter.Value, text.Length);
-                double quantity;
-                if (probability == 0)
-                {
-                    quantity = 0;
+                foreach (KeyValuePair<char, double> letter in map) {
+                    double probability = CountProbability(letter.Value, text.Length);
+                    double quantity;
+                    if (probability == 0) {
+                        quantity = 0;
+                    } else {
+                        quantity = GetQuantity(probability);
+                    }
+                    AnalyzedData pom = new AnalyzedData { Hex = "0x" + ((int)letter.Key).ToString("X"),  Character = letter.Key, Count = letter.Value, Probability = probability, Quantity = quantity };
+                    ListOfAll.Add(pom);
                 }
-                else
-                {
-                    quantity = GetQuantity(probability);
-                }
-                AnalyzedData pom = new AnalyzedData { Character = letter.Key, Count = letter.Value, Probability = probability, Quantity = quantity };
-                ListOfAll.Add(pom);
-            }
-            
-            }
-            catch (FileNotFoundException er)
-            {
+
+            } catch (FileNotFoundException er) {
+                Console.WriteLine(er);
                 MessageBox.Show("File with specifed path not exists.");
 
             }
@@ -59,7 +52,7 @@ namespace TiiK___project
         }
 
         static double GetQuantity(double probability) {
-            return Math.Round(Math.Log(2, 1 / probability), 4);
+            return Math.Round(Math.Log(1 / probability, 2), 4);
         }
     }
 }
