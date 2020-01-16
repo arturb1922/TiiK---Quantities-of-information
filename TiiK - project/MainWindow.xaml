@@ -15,5 +15,6 @@
         <TextBox x:Name="textBox_Entropy" HorizontalAlignment="Left" Height="25" Margin="665,375,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" IsReadOnly="True"/>
         <Label x:Name="label_Entropy" Content="Entropy" HorizontalAlignment="Left" Margin="617,375,0,0" VerticalAlignment="Top" Height="25" FontSize="11"/>
         <Button x:Name="button_Encode" Content="Encode" HorizontalAlignment="Left" Margin="292,77,0,0" VerticalAlignment="Top" Width="74" Click="button_Encode_Click"/>
+        <Button x:Name="button_Decode" Content="Decode" HorizontalAlignment="Left" Margin="292,108,0,0" VerticalAlignment="Top" Width="74" Click="button_Decode_Click" />
     </Grid>
 </Window>

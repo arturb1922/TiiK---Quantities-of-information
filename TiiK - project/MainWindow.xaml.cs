@@ -61,6 +61,11 @@ namespace TiiK___project
             Analyze();
             ShannonFano.Encode(textBox_FileLocation.Text, currentQuantities);
         }
+
+        private void button_Decode_Click(object sender, RoutedEventArgs e)
+        {
+            ShannonFano.Decode(textBox_FileLocation.Text);
+        }
     }
 
     public struct AnalyzedData
