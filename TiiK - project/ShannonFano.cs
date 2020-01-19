@@ -116,7 +116,7 @@ namespace TiiK___project
 
             FileStream stream;
             BinaryWriter writer;
-            using (stream = new FileStream(Path.GetDirectoryName(filepath) + Path.GetFileNameWithoutExtension(filepath) + "_output.txt", FileMode.Create))
+            using (stream = new FileStream(Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_output.txt", FileMode.Create))
             {
                 using (writer = new BinaryWriter(stream))
                 {
@@ -129,12 +129,12 @@ namespace TiiK___project
 
 
             BinaryFormatter formatter = new BinaryFormatter();
-            System.IO.Stream ms = File.OpenWrite(Path.GetDirectoryName(filepath) + Path.GetFileNameWithoutExtension(filepath) + "_output_stats.txt");
+            System.IO.Stream ms = File.OpenWrite(Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_output_stats.txt");
             formatter.Serialize(ms, dictionary);
 
             long f0 = new System.IO.FileInfo(filepath).Length;
-            long f1 = new System.IO.FileInfo(Path.GetDirectoryName(filepath) + Path.GetFileNameWithoutExtension(filepath) + "_output.txt").Length;
-            long f2 = new System.IO.FileInfo(Path.GetDirectoryName(filepath) + Path.GetFileNameWithoutExtension(filepath) + "_output_stats.txt").Length;
+            long f1 = new System.IO.FileInfo(Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_output.txt").Length;
+            long f2 = new System.IO.FileInfo(Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_output_stats.txt").Length;
 
             MessageBox.Show("Compression ratio: " + f0 * 1.0 / (f1 + f2) * 1.0);
             ms.Close();
@@ -203,14 +203,14 @@ namespace TiiK___project
         {
 
             BitArray bits;
-            string stream1 = Path.GetDirectoryName(filepath) + Path.GetFileNameWithoutExtension(filepath) + "_output.txt";
-            string stream2 = Path.GetDirectoryName(filepath) + Path.GetFileNameWithoutExtension(filepath) + "_output_stats.txt";
+            string stream1 = Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_output.txt";
+            string stream2 = Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_output_stats.txt";
 
             System.IO.Stream ms = File.OpenRead(stream2);
             var dictionary = new Dictionary<char, String>();
 
             BinaryReader binReader = new BinaryReader(File.Open(stream1, FileMode.Open, FileAccess.Read));
-            long f1 = new System.IO.FileInfo(Path.GetDirectoryName(filepath) + Path.GetFileNameWithoutExtension(filepath) + "_output.txt").Length;
+            long f1 = new System.IO.FileInfo(Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_output.txt").Length;
             byte[] writeArray = new byte[f1];
             //wczytywanie słownika i deserializacja
             try
@@ -266,7 +266,7 @@ namespace TiiK___project
 
 
             Console.WriteLine(output);
-            System.IO.File.WriteAllText(Path.GetDirectoryName(filepath) + Path.GetFileNameWithoutExtension(filepath) + "_decoding.txt", output);
+            System.IO.File.WriteAllText(Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_decoding.txt", output);
             binReader.Close();
             ms.Close();
 
