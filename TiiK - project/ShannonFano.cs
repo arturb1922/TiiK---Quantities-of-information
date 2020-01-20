@@ -8,6 +8,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Diagnostics;
+
 
 namespace TiiK___project
 {
@@ -59,6 +61,9 @@ namespace TiiK___project
 
         public static void Encode(string filepath, List<AnalyzedData> statistics)
         {
+                        Stopwatch sw = new Stopwatch(); 
+            sw.Start();
+
             //wczytac dane z pliku, zakodowac z pomoca statistics (Character, Probability), zwrocic TablicęKodowania i ZakodowanąWiadomość
             string input = "";
             try
@@ -68,7 +73,7 @@ namespace TiiK___project
             }
             catch (FileNotFoundException er)
             {
-                Console.WriteLine(er);
+                //Console.WriteLine(er);
                 MessageBox.Show("File with specifed path not exists.");
             }
 
@@ -79,18 +84,20 @@ namespace TiiK___project
             {
                 dictionary[s.Character] = "";
             }
+
+
             Shannon(statistics, dictionary);
 
             foreach (var key in dictionary.Keys)
             {
-                Console.WriteLine(key + "\t" + dictionary[key]);
+                //Console.WriteLine(key + "\t" + dictionary[key]);
             }
 
             string binaryString = "";
             foreach (char c in input)
             {
                 binaryString += dictionary[c];
-                Console.WriteLine(binaryString);
+                //Console.WriteLine(binaryString);
             }
 
             var bits = new BitArray(binaryString.Length);
@@ -105,9 +112,9 @@ namespace TiiK___project
                     bits[i] = true;
                 }
             }
-            Console.WriteLine(bits.Length);
+            //Console.WriteLine(bits.Length);
             byte[] bytes = new byte[bits.Length / 8 + 1];
-            Console.WriteLine(bytes.Length);
+            //Console.WriteLine(bytes.Length);
             bits.CopyTo(bytes, 0);
 
 
@@ -135,6 +142,8 @@ namespace TiiK___project
             long f0 = new System.IO.FileInfo(filepath).Length;
             long f1 = new System.IO.FileInfo(Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_output.txt").Length;
             long f2 = new System.IO.FileInfo(Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_output_stats.txt").Length;
+            sw.Stop();
+            Console.WriteLine("Elapsed={0}",sw.Elapsed.TotalMilliseconds);
 
             MessageBox.Show("Compression ratio: " + f0 * 1.0 / (f1 + f2) * 1.0);
             ms.Close();
@@ -146,7 +155,9 @@ namespace TiiK___project
         private static Tuple<List<AnalyzedData>, List<AnalyzedData>> split(List<AnalyzedData> input)
         {
             double sum = 0;
-            foreach (var p in input)
+            List<AnalyzedData> sortedInput = input.OrderByDescending(o=>o.Probability).ToList();
+
+            foreach (var p in sortedInput)
             {
                 sum += p.Probability;
             }
@@ -155,19 +166,23 @@ namespace TiiK___project
             double p1 = 0;
             double p2;
             double old_dif = 1;
-            foreach (var p in input)
+            foreach (var p in sortedInput)
             {
                 p1 += p.Probability;
+                decimal p1pom = (decimal)p1;
                 p2 = sum - p1;
-                var dif = Math.Abs(p1 - p2);
-                if (dif >= old_dif)
+                decimal p2pom = (decimal)p2;
+                var dif = Math.Abs(p1pom - p2pom);
+                decimal difpom = (decimal)dif;
+                decimal oldfdifpom = (decimal)old_dif;
+                if (difpom >= oldfdifpom)
                 {
                     break;
                 }
-                old_dif = dif;
+                old_dif = (double)difpom;
                 separator++;
             }
-            return new Tuple<List<AnalyzedData>, List<AnalyzedData>>(input.GetRange(0, separator), input.GetRange(separator, input.Count - separator));
+            return new Tuple<List<AnalyzedData>, List<AnalyzedData>>(sortedInput.GetRange(0, separator), sortedInput.GetRange(separator, sortedInput.Count - separator));
         }
 
         public static string Dekode(string bitTekst, Dictionary<char, string> dictionary)
@@ -203,14 +218,14 @@ namespace TiiK___project
         {
 
             BitArray bits;
-            string stream1 = Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_output.txt";
-            string stream2 = Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_output_stats.txt";
+            string stream1 = Path.GetDirectoryName(filepath)+'\\' + Path.GetFileName(filepath);
+            string stream2 = Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_stats.txt";
 
             System.IO.Stream ms = File.OpenRead(stream2);
             var dictionary = new Dictionary<char, String>();
 
             BinaryReader binReader = new BinaryReader(File.Open(stream1, FileMode.Open, FileAccess.Read));
-            long f1 = new System.IO.FileInfo(Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_output.txt").Length;
+            long f1 = new System.IO.FileInfo(Path.GetDirectoryName(filepath)+'\\' + Path.GetFileName(filepath)).Length;
             byte[] writeArray = new byte[f1];
             //wczytywanie słownika i deserializacja
             try
@@ -220,7 +235,7 @@ namespace TiiK___project
             }
             catch (SerializationException e)
             {
-                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+                //Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
                 throw;
             }
             finally
@@ -229,7 +244,7 @@ namespace TiiK___project
             }
             foreach (var key in dictionary.Keys)
             {
-                Console.WriteLine(key + "\t" + dictionary[key]);
+                //Console.WriteLine(key + "\t" + dictionary[key]);
             }
 
             string tekst = "";
@@ -257,7 +272,7 @@ namespace TiiK___project
                     bitTekst += 1;
                 }
             }
-            Console.WriteLine(bitTekst);
+            //Console.WriteLine(bitTekst);
 
             string output = string.Empty;
 
@@ -265,10 +280,11 @@ namespace TiiK___project
 
 
 
-            Console.WriteLine(output);
+            //Console.WriteLine(output);
             System.IO.File.WriteAllText(Path.GetDirectoryName(filepath)+'\\' + Path.GetFileNameWithoutExtension(filepath) + "_decoding.txt", output);
             binReader.Close();
             ms.Close();
+            MessageBox.Show("Decompression is done");
 
 
         }
